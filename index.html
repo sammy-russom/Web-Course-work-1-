@@ -9,13 +9,27 @@
 </head>
 <body>
     <div id="app">
-        <section id="subject_page" v-if="can_showSubjects">
-            <h2>Subjects page</h2>
+        <header>
             <button v-on:click="checkout">checkout</button>
-        </section>
-        <section id="cart_page" v-else>
+        </header>
+        <main>
+            <section id="subject_page" v-if="can_showSubjects">
+                <h2>Subjects page</h2>
+                <div id="container">
+                    <div id="filters">
 
-        </section>
+                    </div>
+                    <div id="subjects">
+                        <div class="subject">
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="cart_page" v-else>
+    
+            </section>
+        </main>
     </div>
 </body>
 <script>
@@ -32,6 +46,7 @@
             }
         },
         data:{
+            sitename:"Web Academy",
             showSubjects:true
         }
     })
