@@ -20,9 +20,22 @@
 
                     </div>
                     <div id="subjects">
-                        <div class="subject">
-
+                        <div class="subject" v-for="subject in subjects">
+                            <div style="width: 100%; display: inline-flex; align-items: center;">
+                                <div class="info_container">
+                                    <p>Subject: {{subject.lesson}}</p>
+                                    <p>Location: {{subject.location}}</p>
+                                    <p>Price: £{{subject.price}}</p>
+                                    <p>Spaces: {{subject.spaces}}</p>
+                                </div>
+                                <figure>
+                                    <img class="image" v-bind:src="subject.image">
+                                </figure>
+                            </div>
+                            <button v-if="subject.spaces > 0" v-on:click="addToCart(subject)">Add To Cart</button>
+                            <button v-else disabled>Add To Cart</button>
                         </div>
+                        
                     </div>
                 </div>
             </section>
@@ -32,6 +45,7 @@
         </main>
     </div>
 </body>
+<script src="subjects.js"></script>
 <script>
     var app = new Vue({
         el:"#app",
@@ -41,13 +55,17 @@
             }
         },
         methods:{
+            addToCart(){
+
+            },
             checkout(){
                 this.showSubjects = this.showSubjects ? false : true
             }
         },
         data:{
             sitename:"Web Academy",
-            showSubjects:true
+            showSubjects:true,
+            subjects:[...subjects]
         }
     })
 </script>
