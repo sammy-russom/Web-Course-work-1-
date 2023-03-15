@@ -5,12 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Web Academy</title>
 </head>
 <body>
     <div id="app">
         <header>
-            <button v-on:click="checkout">checkout</button>
+            <!-- <button v-on:click="checkout">checkout</button> -->
+            <button  v-if="canRemoveFromCart" v-on:click="checkout">
+                {{cartItemCount}}
+                <i class="bx bx-cart"></i>
+                Checkout
+            </button>
+            <button disabled="disabled" v-else>
+                {{cartItemCount}}
+                <i class="bx bx-cart"></i>
+            </button>
         </header>
         <main >
             <section id="subject_page" v-if="can_showSubjects">
@@ -87,11 +97,14 @@
             can_showSubjects(){
                 return this.showSubjects
             },
+            cartItemCount(){
+                return this.cart.length || "Empty";
+            },
+            canRemoveFromCart(){
+                return this.cart.length > 0
+            },
             filterItems(){
                 const exclude = ["all","availability","price"]
-                // if (this.searchInput == "" & exclude.includes(this.criteria)) {
-                //     return this.subjects
-                // }
                 if (!exclude.includes(this.criteria)) {
                     return this.subjects.filter(x => x[this.criteria].toLowerCase().includes(this.searchInput)).sort((a,b)=>{
                         switch (this.order) {
@@ -147,7 +160,14 @@
         },
         methods:{
             addToCart(subject){
-                subject.spaces--
+                if (subject.spaces > 0) {
+                    subject.spaces--
+                    const data ={
+                        "cart_id": `${subject.lesson[0]}`+`-${subject.location[0]}-`+Math.ceil(Math.random()*10000),
+                        "item": subject
+                    }
+                    this.cart.push(data)
+                }
             },
             checkout(){
                 this.showSubjects = this.showSubjects ? false : true
