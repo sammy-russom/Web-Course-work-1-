@@ -9,17 +9,30 @@
 </head>
 <body>
     <div id="app">
+        <section id="subject_page" v-if="can_showSubjects">
+            <h2>Subjects page</h2>
+            <button v-on:click="checkout">checkout</button>
+        </section>
+        <section id="cart_page" v-else>
 
+        </section>
     </div>
 </body>
 <script>
     var app = new Vue({
         el:"#app",
         computed:{
-
+            can_showSubjects(){
+                return this.showSubjects
+            }
         },
         methods:{
-            
+            checkout(){
+                this.showSubjects = this.showSubjects ? false : true
+            }
+        },
+        data:{
+            showSubjects:true
         }
     })
 </script>
