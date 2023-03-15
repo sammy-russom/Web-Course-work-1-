@@ -38,11 +38,11 @@
                         </div>
                         <div id="order_by">
                             <div class="radio_container">
-                                <input name="order_radio" type="radio" v-on:click="changeOrder('availability')" checked>
+                                <input name="order_radio" type="radio" v-on:click="changeOrder('ascending')" checked>
                                 <label for="order_radio">Ascending</label>
                             </div>
                             <div class="radio_container">
-                                <input name="order_radio" type="radio">
+                                <input name="order_radio" v-on:click="changeOrder('descending')" type="radio">
                                 <label for="order_radio">Descending</label>
                             </div>
                         </div>
@@ -93,13 +93,55 @@
                 //     return this.subjects
                 // }
                 if (!exclude.includes(this.criteria)) {
-                    return this.subjects.filter(x => x[this.criteria].toLowerCase().includes(this.searchInput))
+                    return this.subjects.filter(x => x[this.criteria].toLowerCase().includes(this.searchInput)).sort((a,b)=>{
+                        switch (this.order) {
+                            case "ascending":
+                                    if(a[this.criteria] > b[this.criteria]){
+                                        return 1
+                                    }
+                                    if(b[this.criteria] > a[this.criteria]){
+                                        return -1
+                                    }
+                                    return 0
+                                break;
+                            case "descending":
+                                if(a[this.criteria] > b[this.criteria]){
+                                    return -1
+                                }
+                                if(b[this.criteria] > a[this.criteria]){
+                                    return 1
+                                }
+                                return 0
+                            break;
+                        }
+                    })
                 }
                 if (this.criteria == "availability") {
                     return this.subjects.filter(x => x["spaces"] > 0)
                 }
                 if (this.criteria == "price") {
-                    return this.subjects.filter(x => (x["price"]+"").includes(this.searchInput))
+                    return this.subjects.filter(x => (x["price"]+"").includes(this.searchInput)).sort((a,b)=>{
+                        switch (this.order) {
+                            case "ascending":
+                                    if(a[this.criteria] > b[this.criteria]){
+                                        return 1
+                                    }
+                                    if(b[this.criteria] > a[this.criteria]){
+                                        return -1
+                                    }
+                                    return 0
+                                break;
+                            case "descending":
+                                if(a[this.criteria] > b[this.criteria]){
+                                    return -1
+                                }
+                                if(b[this.criteria] > a[this.criteria]){
+                                    return 1
+                                }
+                                return 0
+                            break;
+                        }
+                    })
                 }
             }
         },

@@ -8,8 +8,8 @@ const subjects = [
     },
     {
         lesson:"English",
-        location:"Kanairo",
-        price:15,
+        location:"Dar",
+        price:10,
         spaces:5,
         image:""
     },
