@@ -12,28 +12,62 @@
         <header>
             <button v-on:click="checkout">checkout</button>
         </header>
-        <main>
+        <main >
             <section id="subject_page" v-if="can_showSubjects">
                 <h2>Subjects page</h2>
-                <div id="container">
+                <div id="container" style="display: flex; flex-direction: row;">
                     <div id="filters">
-
-                    </div>
-                    <div id="subjects">
-                        <div class="subject" v-for="subject in subjects">
-                            <div style="width: 100%; display: inline-flex; align-items: center;">
-                                <div class="info_container">
-                                    <p>Subject: {{subject.lesson}}</p>
-                                    <p>Location: {{subject.location}}</p>
-                                    <p>Price: £{{subject.price}}</p>
-                                    <p>Spaces: {{subject.spaces}}</p>
-                                </div>
-                                <figure>
-                                    <img class="image" v-bind:src="subject.image">
-                                </figure>
+                        <h3>Sort By</h3>
+                        <div id="sort_by">
+                            <div class="radio_container">
+                                <input name="sort_radio" type="radio" v-on:click="changeCriteria('lesson')" checked>
+                                <label for="sort_radio">Subject</label>
                             </div>
-                            <button v-if="subject.spaces > 0" v-on:click="addToCart(subject)">Add To Cart</button>
-                            <button v-else disabled>Add To Cart</button>
+                            <div class="radio_container">
+                                <input name="sort_radio" type="radio" v-on:click="changeCriteria('location')">
+                                <label for="sort_radio">Location</label>
+                            </div>
+                            <div class="radio_container">
+                                <input name="sort_radio" type="radio" v-on:click="changeCriteria('price')">
+                                <label for="sort_radio">Price</label>
+                            </div>
+                            <div class="radio_container">
+                                <input name="sort_radio" type="radio" v-on:click="changeCriteria('availability')">
+                                <label for="sort_radio">Availability</label>
+                            </div>
+                        </div>
+                        <div id="order_by">
+                            <div class="radio_container">
+                                <input name="order_radio" type="radio" v-on:click="changeOrder('availability')" checked>
+                                <label for="order_radio">Ascending</label>
+                            </div>
+                            <div class="radio_container">
+                                <input name="order_radio" type="radio">
+                                <label for="order_radio">Descending</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="subjects_container">
+                        <div id="search">
+                            <label for="search">Search: </label>
+                            <input name="search" type="text" v-model.trim="searchInput">
+                        </div>
+                        <div id="subjects">
+                            <div class="subject" v-for="subject in filterItems">
+                                <div style="width: 100%; display: inline-flex; align-items: center;">
+                                    <div class="info_container">
+                                        <p>Subject: {{subject.lesson}}</p>
+                                        <p>Location: {{subject.location}}</p>
+                                        <p>Price: £{{subject.price}}</p>
+                                        <p>Spaces: {{subject.spaces}}</p>
+                                    </div>
+                                    <figure>
+                                        <img class="image" v-bind:src="subject.image">
+                                    </figure>
+                                </div>
+                                <button v-if="subject.spaces > 0" v-on:click="addToCart(subject)">Add To Cart</button>
+                                <button v-else disabled>Add To Cart</button>
+                            </div>
                         </div>
                         
                     </div>
@@ -52,18 +86,43 @@
         computed:{
             can_showSubjects(){
                 return this.showSubjects
+            },
+            filterItems(){
+                const exclude = ["all","availability","price"]
+                // if (this.searchInput == "" & exclude.includes(this.criteria)) {
+                //     return this.subjects
+                // }
+                if (!exclude.includes(this.criteria)) {
+                    return this.subjects.filter(x => x[this.criteria].toLowerCase().includes(this.searchInput))
+                }
+                if (this.criteria == "availability") {
+                    return this.subjects.filter(x => x["spaces"] > 0)
+                }
+                if (this.criteria == "price") {
+                    return this.subjects.filter(x => (x["price"]+"").includes(this.searchInput))
+                }
             }
         },
         methods:{
-            addToCart(){
-
+            addToCart(subject){
+                subject.spaces--
             },
             checkout(){
                 this.showSubjects = this.showSubjects ? false : true
+            },
+            changeCriteria(criteria){
+                this.criteria = criteria
+            },
+            changeOrder(order){
+                this.order = order
             }
         },
         data:{
             sitename:"Web Academy",
+            criteria:"lesson",
+            order:"ascending",
+            searchInput:"",
+            cart: [],
             showSubjects:true,
             subjects:[...subjects]
         }
