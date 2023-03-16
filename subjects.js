@@ -1,16 +1,72 @@
 const subjects = [
     {
-        lesson:"Math",
-        location:"Kanairo",
-        price:15,
+        lesson:"Maths",
+        location:"Nairobi",
+        price:200,
         spaces:5,
-        image:""
+        image:"images/maths.jpg"
+    },
+    {
+        lesson:"Biology",
+        location:"Asmara",
+        price:190,
+        spaces:5,
+        image:"images/biology.webp"
+    },
+    {
+        lesson:"Chemistry",
+        location:"Addis",
+        price:155,
+        spaces:5,
+        image:"images/chemistry.png"
     },
     {
         lesson:"English",
-        location:"Dar",
-        price:10,
+        location:"Roma",
+        price:150,
         spaces:5,
-        image:""
+        image:"images/engish.jpg"
+    },
+    {
+        lesson:"Physics",
+        location:"London",
+        price:145,
+        spaces:5,
+        image:"images/physics.jpg"
+    },
+    {
+        lesson:"Sport",
+        location:"New york",
+        price:125,
+        spaces:5,
+        image:"images/sports.jpg"
+    },
+    {
+        lesson:"Music",
+        location:"Mombasa",
+        price:115,
+        spaces:5,
+        image:"images/music.png"
+    },
+    {
+        lesson:"Business",
+        location:"Masawa",
+        price:100,
+        spaces:5,
+        image:"images/business.png"
+    },
+    {
+        lesson:"Econimics",
+        location:"Manchester",
+        price:130,
+        spaces:5,
+        image:"images/economics.png"
+    },
+    {
+        lesson:"UI/UX",
+        location:"Dubai",
+        price:105,
+        spaces:5,
+        image:"images/mobile-app-ux-ui-basics.jpg"
     },
 ]

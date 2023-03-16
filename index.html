@@ -7,26 +7,114 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Web Academy</title>
+    <style>
+        *{
+            padding: 0%;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .display-flex-row{
+            display: flex;
+            flex-direction: row;
+        }
+        .display-flex-col{
+            display: flex;
+            flex-direction: column;
+        }
+        .width{
+            width: 100%;
+        }
+        .height{
+            height: 100%;
+        }
+        .width-height{
+            width: 100%;
+            height: 100%;
+        }
+        header{
+            width: 100%;
+            padding: 0.5rem;
+            align-items: center;
+            justify-content: space-evenly;
+            box-shadow: 1px 6px 6px #21214230;
+        }
+        header button{
+            font-size: 1rem;
+        }
+        
+        #filters{
+            width: 30%;
+            height: 100%;
+            align-items: center;
+        }
+        #subjects{
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-column-gap: 1rem;
+            padding: 1rem;
+        }
+        .subject{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            border: 1px solid #21214290;
+            border-radius: 1rem;
+        }
+        .subject .info_container{
+            padding: 0.5rem;
+        }
+        .subject button{
+            width: 50%;
+            align-self: center;
+            padding: 0.75rem 0;
+            background-color: rgb(0, 179, 255);
+            border-radius: 0.5rem;
+        }
+        .subject figure{
+            width: 120px;
+        }
+        .subject img{
+            width: 100%;
+            object-fit: cover;
+        }
+        .subject *{
+            margin: 0.25rem 0;
+        }
+        #Checkout{
+            width: 30%;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <header>
-            <!-- <button v-on:click="checkout">checkout</button> -->
-            <button  v-if="canRemoveFromCart" v-on:click="checkout">
-                {{cartItemCount}}
-                <i class="bx bx-cart"></i>
-                Checkout
-            </button>
-            <button disabled="disabled" v-else>
-                {{cartItemCount}}
-                <i class="bx bx-cart"></i>
-            </button>
+    <div id="app" class="display-flex-col width-height">
+        <header class="display-flex-row">
+            <h1>{{sitename}}</h1>
+            <div v-if="can_showSubjects">
+                <button  v-if="canRemoveFromCart" v-on:click="checkout">
+                    {{cartItemCount}}
+                    <i class="bx bx-cart"></i>
+                    Checkout
+                </button>
+                <button disabled="disabled" v-else>
+                    {{cartItemCount}}
+                    <i class="bx bx-cart"></i>
+                </button>
+            </div>
+            <div v-else>
+                <button v-on:click="checkout">
+                    <i class='bx bx-left-arrow-alt'></i>
+                    Go back
+                </button>
+            </div>
         </header>
-        <main >
-            <section id="subject_page" v-if="can_showSubjects">
+        <main class="display-flex-col width-height">
+            <section id="subject_page" class="display-flex-col width-height" v-if="can_showSubjects">
                 <h2>Subjects page</h2>
-                <div id="container" style="display: flex; flex-direction: row;">
-                    <div id="filters">
+                <div id="container" class="display-flex-row width-height">
+                    <div id="filters" class="display-flex-col">
                         <h3>Sort By</h3>
                         <div id="sort_by">
                             <div class="radio_container">
@@ -57,12 +145,12 @@
                             </div>
                         </div>
                     </div>
-                    <div id="subjects_container">
+                    <div id="subjects_container" class="display-flex-col width-height">
                         <div id="search">
                             <label for="search">Search: </label>
                             <input name="search" type="text" v-model.trim="searchInput">
                         </div>
-                        <div id="subjects">
+                        <div id="subjects" >
                             <div class="subject" v-for="subject in filterItems">
                                 <div style="width: 100%; display: inline-flex; align-items: center;">
                                     <div class="info_container">
@@ -83,8 +171,41 @@
                     </div>
                 </div>
             </section>
-            <section id="cart_page" v-else>
-    
+            <section id="cart_page"  class="display-flex-col width-height" v-else>
+                <h2>Cart Page</h2>
+                <div id="cart_container" class="display-flex-row width-height">
+                    <div id="Checkout" class="display-flex-col height">
+                        <h2>Checkout Section</h2>
+                        <div class="display-flex-col">
+                            <div class="input_container">
+                                <label for="name">Name: </label>
+                                <input type="text" v-model.trim="userData.name">
+                            </div>
+                            <div class="input_container">
+                                <label for="phone" pattern="[A-Za-z]">Phone: </label>
+                                <input type="text" v-model.trim="userData.phone">
+                            </div>
+                            <button v-if="canCheckout">Checkout</button>
+                        </div>
+                    </div>
+                    <div id="subjects_container" class="display-flex-col width-height">
+                        <div id="subjects">
+                            <div class="subject" v-for="subject in cart">
+                                <div style="width: 100%; display: inline-flex; align-items: center;">
+                                    <div class="info_container">
+                                        <p>Subject: {{subject.item.lesson}}</p>
+                                        <p>Location: {{subject.item.location}}</p>
+                                        <p>Price: £{{subject.item.price}}</p>
+                                    </div>
+                                    <figure>
+                                        <img class="image" v-bind:src="subject.item.image">
+                                    </figure>
+                                </div>
+                                <button v-on:click="removeFromCart(subject.item)">Remove From Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
     </div>
@@ -102,6 +223,22 @@
             },
             canRemoveFromCart(){
                 return this.cart.length > 0
+            },
+            canCheckout(){
+                const letters = /^[A-Za-z]+$/;
+                const numbers = /^[0-9]+$/;
+                let valid = true
+                if(this.userData.name.match(letters) == null){
+                    valid = false
+                }
+                if(this.userData.phone.match(numbers) == null){
+                    valid = false
+                }
+                if(valid){
+                    return true
+                }else{
+                    return false
+                }
             },
             filterItems(){
                 const exclude = ["all","availability","price"]
@@ -169,6 +306,17 @@
                     this.cart.push(data)
                 }
             },
+            removeFromCart(cart_item){
+                cart_item.spaces++
+                for(let i = 0; i < this.cart.length; i++){
+                    const item = this.cart[i]
+                    if(cart_item.id == item.id){
+                        this.cart.splice(i,1)
+                        break;
+                    }
+                }
+                
+            },
             checkout(){
                 this.showSubjects = this.showSubjects ? false : true
             },
@@ -186,7 +334,11 @@
             searchInput:"",
             cart: [],
             showSubjects:true,
-            subjects:[...subjects]
+            subjects:[...subjects],
+            userData:{
+                name:"",
+                phone:"",
+            },
         }
     })
 </script>
