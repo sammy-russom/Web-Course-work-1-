@@ -65,7 +65,7 @@ const subjects = [
     {
         lesson:"UI/UX",
         location:"Dubai",
-        price:105,
+        price:190,
         spaces:5,
         image:"images/mobile-app-ux-ui-basics.jpg"
     },
